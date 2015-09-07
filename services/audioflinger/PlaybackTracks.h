@@ -101,11 +101,6 @@ protected:
     void flushAck();
     bool isResumePending();
     void resumeAck();
-    void signalError();
-
-    bool isOutputTrack() const {
-        return (mStreamType == AUDIO_STREAM_CNT);
-    }
 
     sp<IMemory> sharedBuffer() const { return mSharedBuffer; }
 

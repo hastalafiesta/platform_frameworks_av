@@ -129,8 +129,8 @@ audio_io_handle_t AudioPolicyService::getOutput(audio_stream_type_t stream,
                                     audio_output_flags_t flags,
                                     const audio_offload_info_t *offloadInfo)
 {
-    if (uint32_t(stream) >= AUDIO_STREAM_CNT) {
-        return BAD_VALUE;
+    if (uint32_t(stream) >= AUDIO_STREAM_PUBLIC_CNT) {
+        return AUDIO_IO_HANDLE_NONE;
     }
     if (mAudioPolicyManager == NULL) {
         return AUDIO_IO_HANDLE_NONE;
@@ -184,7 +184,6 @@ status_t AudioPolicyService::startOutput(audio_io_handle_t output,
         }
     }
     Mutex::Autolock _l(mLock);
-    setPowerHint(true);
     return mAudioPolicyManager->startOutput(output, stream, session);
 }
 
@@ -221,9 +220,7 @@ status_t  AudioPolicyService::doStopOutput(audio_io_handle_t output,
         }
     }
     Mutex::Autolock _l(mLock);
-    status_t ret = mAudioPolicyManager->stopOutput(output, stream, session);
-    setPowerHint(false);
-    return ret;
+    return mAudioPolicyManager->stopOutput(output, stream, session);
 }
 
 void AudioPolicyService::releaseOutput(audio_io_handle_t output,
@@ -328,7 +325,6 @@ status_t AudioPolicyService::startInput(audio_io_handle_t input,
     }
     Mutex::Autolock _l(mLock);
 
-    setPowerHint(true);
     return mAudioPolicyManager->startInput(input, session);
 }
 
@@ -340,9 +336,7 @@ status_t AudioPolicyService::stopInput(audio_io_handle_t input,
     }
     Mutex::Autolock _l(mLock);
 
-    status_t ret = mAudioPolicyManager->stopInput(input, session);
-    setPowerHint(false);
-    return ret;
+    return mAudioPolicyManager->stopInput(input, session);
 }
 
 void AudioPolicyService::releaseInput(audio_io_handle_t input,
@@ -421,8 +415,8 @@ status_t AudioPolicyService::getStreamVolumeIndex(audio_stream_type_t stream,
 
 uint32_t AudioPolicyService::getStrategyForStream(audio_stream_type_t stream)
 {
-    if (uint32_t(stream) >= AUDIO_STREAM_CNT) {
-        return BAD_VALUE;
+    if (uint32_t(stream) >= AUDIO_STREAM_PUBLIC_CNT) {
+        return 0;
     }
     if (mAudioPolicyManager == NULL) {
         return 0;
@@ -434,8 +428,8 @@ uint32_t AudioPolicyService::getStrategyForStream(audio_stream_type_t stream)
 
 audio_devices_t AudioPolicyService::getDevicesForStream(audio_stream_type_t stream)
 {
-    if (uint32_t(stream) >= AUDIO_STREAM_CNT) {
-        return BAD_VALUE;
+    if (uint32_t(stream) >= AUDIO_STREAM_PUBLIC_CNT) {
+        return AUDIO_DEVICE_NONE;
     }
     if (mAudioPolicyManager == NULL) {
         return AUDIO_DEVICE_NONE;
@@ -483,8 +477,8 @@ status_t AudioPolicyService::setEffectEnabled(int id, bool enabled)
 
 bool AudioPolicyService::isStreamActive(audio_stream_type_t stream, uint32_t inPastMs) const
 {
-    if (uint32_t(stream) >= AUDIO_STREAM_CNT) {
-        return BAD_VALUE;
+    if (uint32_t(stream) >= AUDIO_STREAM_PUBLIC_CNT) {
+        return false;
     }
     if (mAudioPolicyManager == NULL) {
         return false;
@@ -495,8 +489,8 @@ bool AudioPolicyService::isStreamActive(audio_stream_type_t stream, uint32_t inP
 
 bool AudioPolicyService::isStreamActiveRemotely(audio_stream_type_t stream, uint32_t inPastMs) const
 {
-    if (uint32_t(stream) >= AUDIO_STREAM_CNT) {
-        return BAD_VALUE;
+    if (uint32_t(stream) >= AUDIO_STREAM_PUBLIC_CNT) {
+        return false;
     }
     if (mAudioPolicyManager == NULL) {
         return false;

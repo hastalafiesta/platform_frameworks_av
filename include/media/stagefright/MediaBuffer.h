@@ -93,7 +93,6 @@ protected:
 private:
     friend class MediaBufferGroup;
     friend class OMXDecoder;
-    friend class MediaAdapter;
 
     // For use by OMXDecoder, reference count must be 1, drop reference
     // count to 0 without signalling the observer.

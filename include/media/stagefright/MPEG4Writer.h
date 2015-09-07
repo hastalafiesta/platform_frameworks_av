@@ -23,7 +23,6 @@
 #include <media/stagefright/MediaWriter.h>
 #include <utils/List.h>
 #include <utils/threads.h>
-#include <media/stagefright/ExtendedStats.h>
 
 namespace android {
 
@@ -61,7 +60,7 @@ public:
     void endBox();
     uint32_t interleaveDuration() const { return mInterleaveDurationUs; }
     status_t setInterleaveDuration(uint32_t duration);
-    int32_t getTimeScale() const { return (mTimeScale / mHFRRatio); }
+    int32_t getTimeScale() const { return mTimeScale; }
 
     status_t setGeoData(int latitudex10000, int longitudex10000);
     virtual void setStartTimeOffsetMs(int ms) { mStartTimeOffsetMs = ms; }
@@ -97,7 +96,6 @@ private:
     int mLongitudex10000;
     bool mAreGeoTagsAvailable;
     int32_t mStartTimeOffsetMs;
-    int mHFRRatio;
 
     Mutex mLock;
 
@@ -206,9 +204,6 @@ private:
 
     MPEG4Writer(const MPEG4Writer &);
     MPEG4Writer &operator=(const MPEG4Writer &);
-
-    bool mIsVideoHEVC;
-    bool mIsAudioAMR;
 };
 
 }  // namespace android

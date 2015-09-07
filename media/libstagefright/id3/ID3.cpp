@@ -483,9 +483,8 @@ void ID3::Iterator::getString(String8 *id, String8 *comment) const {
 void ID3::Iterator::getstring(String8 *id, bool otherdata) const {
     id->setTo("");
 
-    size_t size;
-    const uint8_t *frameData = getData(&size);
-    if ((size == 0) || (frameData == NULL)) {
+    const uint8_t *frameData = mFrameData;
+    if (frameData == NULL) {
         return;
     }
 
@@ -794,8 +793,8 @@ ID3::getAlbumArt(size_t *length, String8 *mime) const {
             mime->setTo((const char *)&data[1]);
             size_t mimeLen = strlen((const char *)&data[1]) + 1;
 
-#if 0
             uint8_t picType = data[1 + mimeLen];
+#if 0
             if (picType != 0x03) {
                 // Front Cover Art
                 it.next();

@@ -105,7 +105,6 @@ public:
     void                sendObjectAdded(MtpObjectHandle handle);
     void                sendObjectRemoved(MtpObjectHandle handle);
     void                sendDevicePropertyChanged(MtpDeviceProperty property);
-    void                sendObjectUpdated(MtpObjectHandle handle);
 
 private:
     void                sendStoreAdded(MtpStorageID id);

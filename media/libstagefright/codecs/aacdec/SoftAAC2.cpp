@@ -75,7 +75,7 @@ SoftAAC2::SoftAAC2(
 
 SoftAAC2::~SoftAAC2() {
     aacDecoder_Close(mAACDecoder);
-    delete[] mOutputDelayRingBuffer;
+    delete mOutputDelayRingBuffer;
 }
 
 void SoftAAC2::initPorts() {
@@ -876,7 +876,7 @@ void SoftAAC2::onQueueFilled(OMX_U32 /* portIndex */) {
                         *nextTimeStamp += mStreamInfo->aacSamplesPerFrame *
                                 1000000ll / mStreamInfo->sampleRate;
                         ALOGV("adjusted nextTimeStamp/size to %lld/%d",
-                                (long long) *nextTimeStamp, *currentBufLeft);
+                                *nextTimeStamp, *currentBufLeft);
                     } else {
                         // move to next timestamp in list
                         if (mBufferTimestamps.size() > 0) {
@@ -885,7 +885,7 @@ void SoftAAC2::onQueueFilled(OMX_U32 /* portIndex */) {
                             mBufferSizes.removeAt(0);
                             currentBufLeft = &mBufferSizes.editItemAt(0);
                             ALOGV("moved to next time/size: %lld/%d",
-                                    (long long) *nextTimeStamp, *currentBufLeft);
+                                    *nextTimeStamp, *currentBufLeft);
                         }
                         // try to limit output buffer size to match input buffers
                         // (e.g when an input buffer contained 4 "sub" frames, output
@@ -993,6 +993,8 @@ void SoftAAC2::onPortFlushCompleted(OMX_U32 portIndex) {
 }
 
 void SoftAAC2::drainDecoder() {
+    int32_t outputDelay = mStreamInfo->outputDelay * mStreamInfo->numChannels;
+
     // flush decoder until outputDelay is compensated
     while (mOutputDelayCompensated > 0) {
         // a buffer big enough for MAX_CHANNEL_COUNT channels of decoded HE-AAC

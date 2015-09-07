@@ -60,11 +60,13 @@ void Copy(
 		*y++ = temp1;
 	}
 	num = (Word32)(L>>1);
+	temp1 = *x++;
+	temp2 = *x++;
 	do{
-		temp1 = *x++;
-		temp2 = *x++;
 		*y++ = temp1;
 		*y++ = temp2;
+		temp1 = *x++;
+		temp2 = *x++;
 	}while(--num!=0);
 }
 

@@ -119,20 +119,20 @@ struct BufferMeta {
         if (!mIsBackup) {
             return;
         }
-        size_t bytesToCopy = header->nFlags & OMX_BUFFERFLAG_EXTRADATA ?
-            header->nAllocLen - header->nOffset : header->nFilledLen;
+
         memcpy((OMX_U8 *)mMem->pointer() + header->nOffset,
-               header->pBuffer + header->nOffset, bytesToCopy);
+                header->pBuffer + header->nOffset,
+                header->nFilledLen);
     }
 
     void CopyToOMX(const OMX_BUFFERHEADERTYPE *header) {
         if (!mIsBackup) {
             return;
         }
-        size_t bytesToCopy = header->nFlags & OMX_BUFFERFLAG_EXTRADATA ?
-            header->nAllocLen - header->nOffset : header->nFilledLen;
+
         memcpy(header->pBuffer + header->nOffset,
-               (const OMX_U8 *)mMem->pointer() + header->nOffset, bytesToCopy);
+                (const OMX_U8 *)mMem->pointer() + header->nOffset,
+                header->nFilledLen);
     }
 
     void setGraphicBuffer(const sp<GraphicBuffer> &graphicBuffer) {
@@ -255,7 +255,6 @@ status_t OMXNodeInstance::freeNode(OMXMaster *master) {
     OMX_STATETYPE state;
     CHECK_EQ(OMX_GetState(mHandle, &state), OMX_ErrorNone);
     switch (state) {
-        case OMX_StatePause:
         case OMX_StateExecuting:
         {
             ALOGV("forcing Executing->Idle");

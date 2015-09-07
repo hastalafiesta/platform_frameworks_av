@@ -95,7 +95,6 @@ static const MtpEventCode kSupportedEventCodes[] = {
     MTP_EVENT_STORE_ADDED,
     MTP_EVENT_STORE_REMOVED,
     MTP_EVENT_DEVICE_PROP_CHANGED,
-    MTP_EVENT_OBJECT_PROP_CHANGED,
 };
 
 MtpServer::MtpServer(int fd, MtpDatabase* database, bool ptp,
@@ -120,8 +119,6 @@ MtpServer::~MtpServer() {
 void MtpServer::addStorage(MtpStorage* storage) {
     Mutex::Autolock autoLock(mMutex);
 
-    if(hasStorage(storage->getStorageID()))
-        return;
     mStorages.push(storage);
     sendStoreAdded(storage->getStorageID());
 }
@@ -254,11 +251,6 @@ void MtpServer::sendObjectAdded(MtpObjectHandle handle) {
 void MtpServer::sendObjectRemoved(MtpObjectHandle handle) {
     ALOGV("sendObjectRemoved %d\n", handle);
     sendEvent(MTP_EVENT_OBJECT_REMOVED, handle);
-}
-
-void MtpServer::sendObjectUpdated(MtpObjectHandle handle) {
-    ALOGV("sendObjectUpdated %d\n", handle);
-    sendEvent(MTP_EVENT_OBJECT_PROP_CHANGED, handle);
 }
 
 void MtpServer::sendStoreAdded(MtpStorageID id) {

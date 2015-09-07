@@ -284,17 +284,11 @@ status_t BnHDCP::onTransact(
             size_t offset = data.readInt32();
             size_t size = data.readInt32();
             uint32_t streamCTR = data.readInt32();
-            void *outData = NULL;
+            void *outData = malloc(size);
             uint64_t inputCTR;
 
-            status_t err = ERROR_OUT_OF_RANGE;
-
-            outData = malloc(size);
-
-            if (outData != NULL) {
-                err = encryptNative(graphicBuffer, offset, size,
-                                             streamCTR, &inputCTR, outData);
-            }
+            status_t err = encryptNative(graphicBuffer, offset, size,
+                                         streamCTR, &inputCTR, outData);
 
             reply->writeInt32(err);
 

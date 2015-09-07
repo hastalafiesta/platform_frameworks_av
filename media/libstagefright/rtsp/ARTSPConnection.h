@@ -102,8 +102,6 @@ private:
     void flushPendingRequests();
     void postReceiveReponseEvent();
 
-    bool createSocketAndConnect(void *res, unsigned int, const sp<AMessage> &reply);
-
     // Return false iff something went unrecoverably wrong.
     bool receiveRTSPReponse();
     status_t receive(void *data, size_t size);

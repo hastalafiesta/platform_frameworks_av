@@ -27,8 +27,7 @@ namespace android {
 MediaAdapter::MediaAdapter(const sp<MetaData> &meta)
     : mCurrentMediaBuffer(NULL),
       mStarted(false),
-      mOutputFormat(meta),
-      mStatus(OK) {
+      mOutputFormat(meta) {
 }
 
 MediaAdapter::~MediaAdapter() {
@@ -52,9 +51,6 @@ status_t MediaAdapter::stop() {
         // If stop() happens immediately after a pushBuffer(), we should
         // clean up the mCurrentMediaBuffer
         if (mCurrentMediaBuffer != NULL) {
-            mCurrentMediaBuffer->setObserver(this);
-            mCurrentMediaBuffer->claim();
-            mCurrentMediaBuffer->setObserver(0);
             mCurrentMediaBuffer->release();
             mCurrentMediaBuffer = NULL;
         }
@@ -117,23 +113,13 @@ status_t MediaAdapter::pushBuffer(MediaBuffer *buffer) {
         ALOGE("pushBuffer called before start");
         return INVALID_OPERATION;
     }
-    if (mStatus != OK) {
-        ALOGE("pushBuffer called when MediaAdapter in error status");
-        return mStatus;
-    }
     mCurrentMediaBuffer = buffer;
     mBufferReadCond.signal();
 
     ALOGV("wait for the buffer returned @ pushBuffer! %p", buffer);
     mBufferReturnedCond.wait(mAdapterLock);
 
-    return mStatus;
-}
-
-void MediaAdapter::notifyError(status_t err) {
-    Mutex::Autolock autoLock(mAdapterLock);
-    mStatus = err;
-    mBufferReturnedCond.signal();
+    return OK;
 }
 
 }  // namespace android

@@ -147,10 +147,6 @@ public:
         TONE_CDMA_ABBR_ALERT,
         TONE_CDMA_SIGNAL_OFF,
         //CDMA end
-        TONE_LOCAL_CW,
-        TONE_SUPERVISORY_CH,
-        TONE_HOLD_RECALL,
-
         NUM_TONES,
         NUM_SUP_TONES = LAST_SUP_TONE-FIRST_SUP_TONE+1
     };
@@ -211,7 +207,7 @@ private:
     static const unsigned int TONEGEN_MAX_WAVES = 3;     // Maximun number of sine waves in a tone segment
     static const unsigned int TONEGEN_MAX_SEGMENTS = 12;  // Maximun number of segments in a tone descriptor
     static const unsigned int TONEGEN_INF = 0xFFFFFFFF;  // Represents infinite time duration
-    #define TONEGEN_GAIN 0.9  // Default gain passed to  WaveGenerator().
+    static const float TONEGEN_GAIN = 0.9;  // Default gain passed to  WaveGenerator().
 
     // ToneDescriptor class contains all parameters needed to generate a tone:
     //    - The array waveFreq[]:

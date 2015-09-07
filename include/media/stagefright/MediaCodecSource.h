@@ -21,14 +21,6 @@
 #include <media/stagefright/foundation/AHandlerReflector.h>
 #include <media/stagefright/MediaSource.h>
 
-#include <media/stagefright/ExtendedStats.h>
-#define RECORDER_STATS(func, ...) \
-    do { \
-        if(mRecorderExtendedStats != NULL) { \
-            mRecorderExtendedStats->func(__VA_ARGS__);} \
-    } \
-    while(0)
-
 namespace android {
 
 class ALooper;
@@ -99,7 +91,6 @@ private:
     bool reachedEOS();
     status_t postSynchronouslyAndReturnError(const sp<AMessage> &msg);
 
-    sp<RecorderExtendedStats> mRecorderExtendedStats;
     sp<ALooper> mLooper;
     sp<ALooper> mCodecLooper;
     sp<AHandlerReflector<MediaCodecSource> > mReflector;
